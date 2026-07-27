@@ -1,0 +1,39 @@
+*{ 
+    margin: auto;
+    padding: 0;
+box-sizing: border-box;
+}
+ body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #4dc6bc;
+    color:#fff;
+
+
+ }
+.app{
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#input{
+    margin: 20px 0;
+    background-color: antiquewhite;
+    border: none;
+padding: 15px 20px;
+    border-radius: 10px; 
+}
+#button{
+    margin: 10px;
+    background-color: #b39c1d;
+    color: #fff;
+    border: none;   
+    padding: 15px 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+
