@@ -1,2 +1,2 @@
-# TaskForge
-TaskForge – A modern task scheduler and productivity app for organizing tasks, tracking progress, and building efficient workflows.
+# CodeCanvas
+A curated collection of modern web development projects built with HTML, CSS, JavaScript, React, Next.js, Node.js, and the MERN stack.
