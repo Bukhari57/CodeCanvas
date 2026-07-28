@@ -13,12 +13,12 @@ body {
 .app {
     width: 100%;
     max-width: 450px;
-    margin: 90px auto;
+    margin: 120px auto;
     text-align:center
 }
 
 h1 {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 
@@ -26,6 +26,7 @@ h1 {
 
 .task-input {
     margin-bottom: 20px;
+    
 }
 
 #taskInput {
@@ -65,14 +66,68 @@ h1 {
 }
 
 #taskList {
-    list-style:circle
+    list-style: none;
+    padding: 0;
 }
 
 #taskList li {
     background-color: rgba(255, 255, 255, 0.2);
-    padding: 10px;
+    padding: 10px 15px;
     margin-bottom: 10px;
     border-radius: 5px;
-    word-wrap: break-word;
-    overflow-wrap:break-word
-} 
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#taskList li span {
+    flex: 1;
+    color: rgb(254, 248, 248);
+    word-break: break-word;
+}
+
+.button-group {
+    display: flex;
+    gap: 8px;
+    margin-left: 15px;
+}
+
+.completed span {
+    text-decoration: line-through;
+    color: lightgray;
+}
+
+.complete-btn,
+.edit-btn,
+.delete-btn {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+.complete-btn {
+    background-color: #28a745;
+}
+.complete-btn:hover{
+    background-color: #2bb74c;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: black;
+}
+
+
+.edit-btn:hover {
+    background-color: #ddbe22;}
+
+    .delete-btn {
+    background-color: #bd1f2f;
+}
+
+    .delete-btn:hover {
+    background-color: #d63041;
+}
