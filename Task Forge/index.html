@@ -1,21 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskForge</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
     <main class="app">
-    <h1>Task Forge</h1>
-    <input type="text" id="input" placeholder="Enter a new habit">
-    <button id="button">Add</button>
-    <section id="habit-section">
-        <h2>Task List</h2>
-        <ul id="habit-list"></ul>
-    </section>
+
+        <h1>TaskForge</h1>
+
+        <section class="task-input">
+
+            <input type="text" id="taskInput" placeholder="Enter a new task..." autocomplete="off">
+
+            <button id="addTaskBtn">Add Task</button>
+
+        </section>
+
+        <p id="errorMessage"></p>
+
+        <section class="task-section">
+
+            <h2>Task List</h2>
+
+            <ul id="taskList"></ul>
+
+        </section>
+
     </main>
+
     <script src="script.js"></script>
+
 </body>
 </html>
