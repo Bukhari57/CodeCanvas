@@ -1,21 +1,41 @@
+// ===============================
+// Array to store all tasks
+// ===============================
 const tasks = [];
 
+// This variable stores the ID of the task being edited.
+// If it is null, we are adding a new task.
+let editingTaskId = null;
+
+// ===============================
+// Get HTML Elements
+// ===============================
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const errorMessage = document.getElementById("errorMessage");
 
+// ===============================
+// Event Listeners
+// ===============================
 
-
+// Add or Update task
 addTaskBtn.addEventListener("click", addTask);
 
+// Remove error message while typing
 taskInput.addEventListener("input", function () {
-    errorMessage.textContent = "";})
+    errorMessage.textContent = "";
+});
 
-
+// ===============================
+// Add New Task / Update Task
+// ===============================
 function addTask() {
+
+    // Remove extra spaces
     const taskText = taskInput.value.trim();
 
+    // Check if input is empty
     if (taskText === "") {
         errorMessage.textContent = "Please enter a task.";
         return;
@@ -23,71 +43,248 @@ function addTask() {
 
     errorMessage.textContent = "";
 
-    tasks.push({
-        text: taskText,
-        completed: false
-    });
+    // ===============================
+    // Update Existing Task
+    // ===============================
+    if (editingTaskId !== null) {
 
+        const task = tasks.find(function (task) {
+            return task.id === editingTaskId;
+        });
+
+        task.text = taskText;
+
+        // Update only this task in DOM
+        updateTaskElement(task);
+
+        // Exit edit mode
+        editingTaskId = null;
+
+        // Change button text back
+        addTaskBtn.textContent = "Add Task";
+
+    }
+
+    // ===============================
+    // Add New Task
+    // ===============================
+    else {
+
+        const task = {
+            id: Date.now(),
+            text: taskText,
+            completed: false
+        };
+
+        tasks.push(task);
+
+        // Add only one task to the page
+        renderTask(task);
+    }
+
+    // Clear input
     taskInput.value = "";
 
-
-    displayTasks();
+    // Focus input
+    taskInput.focus();
 }
 
-function displayTasks() {
-    taskList.innerHTML = "";
+// ===============================
+// Render One Task
+// ===============================
+function renderTask(task) {
 
-    tasks.forEach(function(task, index) {
+    const taskElement = createTaskElement(task);
 
-        const li = document.createElement("li");
+    taskList.appendChild(taskElement);
+}
 
-        if (task.completed) {
-            li.classList.add("completed");
-        }
+// ===============================
+// Create Task Element
+// ===============================
+function createTaskElement(task) {
 
-        const span = document.createElement("span");
-        span.textContent = task.text;
+    // Create list item
+    const li = document.createElement("li");
 
-        const completeBtn = document.createElement("button");
-        completeBtn.textContent = task.completed ? "Undo" : "Complete";
-        completeBtn.classList.add("complete-btn");
+    // Save task id inside HTML
+    li.dataset.id = task.id;
 
-        completeBtn.addEventListener("click", function() {
-            task.completed = !task.completed;
-            displayTasks();
-        });
+    // Add completed class
+    if (task.completed) {
+        li.classList.add("completed");
+    }
 
-        const editBtn = document.createElement("button");
-        editBtn.textContent = "Edit";
-        editBtn.classList.add("edit-btn");
+    // ===============================
+    // Task Text
+    // ===============================
+    const span = document.createElement("span");
+    span.textContent = task.text;
 
-        editBtn.addEventListener("click", function() {
-            const newTask = prompt("Edit task", task.text);
+    // ===============================
+    // Complete Button
+    // ===============================
+    const completeBtn = document.createElement("button");
 
-            if (newTask !== null && newTask.trim() !== "") {
-                task.text = newTask.trim();
-                displayTasks();
-            }
-        });
+    completeBtn.textContent = task.completed ? "Undo" : "Complete";
 
-        const deleteBtn = document.createElement("button");
-        deleteBtn.textContent = "Delete";
-        deleteBtn.classList.add("delete-btn");
+    completeBtn.classList.add("complete-btn");
 
-        deleteBtn.addEventListener("click", function() {
-            tasks.splice(index, 1);
-            displayTasks();
-        });
-const buttonGroup = document.createElement("div");
-buttonGroup.classList.add("button-group");
+    completeBtn.addEventListener("click", function () {
 
-buttonGroup.appendChild(completeBtn);
-buttonGroup.appendChild(editBtn);
-buttonGroup.appendChild(deleteBtn);
+        toggleTask(task.id);
 
-li.appendChild(span);
-li.appendChild(buttonGroup);
-
-        taskList.appendChild(li);
     });
+
+    // ===============================
+    // Edit Button
+    // ===============================
+    const editBtn = document.createElement("button");
+
+    editBtn.textContent = "Edit";
+
+    editBtn.classList.add("edit-btn");
+
+    editBtn.addEventListener("click", function () {
+
+        editTask(task.id);
+
+    });
+
+    // ===============================
+    // Delete Button
+    // ===============================
+    const deleteBtn = document.createElement("button");
+
+    deleteBtn.textContent = "Delete";
+
+    deleteBtn.classList.add("delete-btn");
+
+    deleteBtn.addEventListener("click", function () {
+
+        deleteTask(task.id);
+
+    });
+
+    // ===============================
+    // Button Group
+    // ===============================
+    const buttonGroup = document.createElement("div");
+
+    buttonGroup.classList.add("button-group");
+
+    buttonGroup.appendChild(completeBtn);
+    buttonGroup.appendChild(editBtn);
+    buttonGroup.appendChild(deleteBtn);
+
+    // ===============================
+    // Add Elements into List Item
+    // ===============================
+    li.appendChild(span);
+
+    li.appendChild(buttonGroup);
+
+    return li;
+}
+
+// ===============================
+// Complete / Undo Task
+// ===============================
+function toggleTask(id) {
+
+    const task = tasks.find(function (task) {
+
+        return task.id === id;
+
+    });
+
+    task.completed = !task.completed;
+
+    updateTaskElement(task);
+}
+
+// ===============================
+// Edit Task
+// ===============================
+function editTask(id) {
+
+    const task = tasks.find(function (task) {
+
+        return task.id === id;
+
+    });
+
+    // Put task text into input field
+    taskInput.value = task.text;
+
+    // Save task id
+    editingTaskId = id;
+
+    // Change button text
+    addTaskBtn.textContent = "Update Task";
+
+    // Focus input
+    taskInput.focus();
+}
+
+// ===============================
+// Delete Task
+// ===============================
+function deleteTask(id) {
+
+    const index = tasks.findIndex(function (task) {
+
+        return task.id === id;
+
+    });
+
+    // Remove task from array
+    tasks.splice(index, 1);
+
+    // Remove task from page
+    removeTaskElement(id);
+
+    // If the deleted task was being edited,
+    // reset edit mode.
+    if (editingTaskId === id) {
+
+        editingTaskId = null;
+
+        taskInput.value = "";
+
+        addTaskBtn.textContent = "Add Task";
+    }
+}
+
+// ===============================
+// Update One Task
+// ===============================
+function updateTaskElement(task) {
+
+    // Find old element
+    const oldElement = document.querySelector(
+        '[data-id="' + task.id + '"]'
+    );
+
+    // Create updated element
+    const newElement = createTaskElement(task);
+
+    // Replace old with new
+    oldElement.replaceWith(newElement);
+}
+
+// ===============================
+// Remove One Task
+// ===============================
+function removeTaskElement(id) {
+
+    const taskElement = document.querySelector(
+        '[data-id="' + id + '"]'
+    );
+
+    if (taskElement) {
+
+        taskElement.remove();
+
+    }
 }
