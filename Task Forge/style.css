@@ -30,6 +30,7 @@ h1 {
 }
 
 #taskInput {
+    resize: none;
     width: 100%;
     padding: 22px;
     border: none;
