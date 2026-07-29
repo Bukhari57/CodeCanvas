@@ -1,23 +1,33 @@
-// ===============================
+
 // Array to store all tasks
-// ===============================
+
 const tasks = [];
 
-// This variable stores the ID of the task being edited.
-// If it is null, we are adding a new task.
+// const tasks = [
+//     {
+//         id: 1753872000000,
+//         text: "Complete JavaScript project",
+//         completed: false
+//     },
+//     {
+//         id: 1753872012345,
+//         text: "Practice DOM Manipulation",
+//         completed: true
+//     }
+// ];
+
+// This variable stores the ID of the task being edited.If it is null, we are adding a new task.
 let editingTaskId = null;
 
-// ===============================
+
 // Get HTML Elements
-// ===============================
+
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const errorMessage = document.getElementById("errorMessage");
 
-// ===============================
-// Event Listeners
-// ===============================
+
 
 // Add or Update task
 addTaskBtn.addEventListener("click", addTask);
@@ -27,15 +37,14 @@ taskInput.addEventListener("input", function () {
     errorMessage.textContent = "";
 });
 
-// ===============================
+
 // Add New Task / Update Task
-// ===============================
+
 function addTask() {
 
-    // Remove extra spaces
+    
     const taskText = taskInput.value.trim();
 
-    // Check if input is empty
     if (taskText === "") {
         errorMessage.textContent = "Please enter a task.";
         return;
@@ -43,9 +52,9 @@ function addTask() {
 
     errorMessage.textContent = "";
 
-    // ===============================
+    
     // Update Existing Task
-    // ===============================
+    
     if (editingTaskId !== null) {
 
         const task = tasks.find(function (task) {
@@ -65,9 +74,9 @@ function addTask() {
 
     }
 
-    // ===============================
+    
     // Add New Task
-    // ===============================
+    
     else {
 
         const task = {
@@ -82,16 +91,15 @@ function addTask() {
         renderTask(task);
     }
 
-    // Clear input
     taskInput.value = "";
 
-    // Focus input
+  
     taskInput.focus();
 }
 
-// ===============================
+
 // Render One Task
-// ===============================
+
 function renderTask(task) {
 
     const taskElement = createTaskElement(task);
@@ -99,31 +107,31 @@ function renderTask(task) {
     taskList.appendChild(taskElement);
 }
 
-// ===============================
+
 // Create Task Element
-// ===============================
+
 function createTaskElement(task) {
 
-    // Create list item
+  
     const li = document.createElement("li");
 
     // Save task id inside HTML
     li.dataset.id = task.id;
 
-    // Add completed class
+   
     if (task.completed) {
         li.classList.add("completed");
     }
 
-    // ===============================
+    
     // Task Text
-    // ===============================
+    
     const span = document.createElement("span");
     span.textContent = task.text;
 
-    // ===============================
+    
     // Complete Button
-    // ===============================
+    
     const completeBtn = document.createElement("button");
 
     completeBtn.textContent = task.completed ? "Undo" : "Complete";
@@ -136,9 +144,9 @@ function createTaskElement(task) {
 
     });
 
-    // ===============================
+    
     // Edit Button
-    // ===============================
+    
     const editBtn = document.createElement("button");
 
     editBtn.textContent = "Edit";
@@ -151,9 +159,9 @@ function createTaskElement(task) {
 
     });
 
-    // ===============================
+    
     // Delete Button
-    // ===============================
+    
     const deleteBtn = document.createElement("button");
 
     deleteBtn.textContent = "Delete";
@@ -166,9 +174,9 @@ function createTaskElement(task) {
 
     });
 
-    // ===============================
+    
     // Button Group
-    // ===============================
+    
     const buttonGroup = document.createElement("div");
 
     buttonGroup.classList.add("button-group");
@@ -177,9 +185,9 @@ function createTaskElement(task) {
     buttonGroup.appendChild(editBtn);
     buttonGroup.appendChild(deleteBtn);
 
-    // ===============================
+    
     // Add Elements into List Item
-    // ===============================
+    
     li.appendChild(span);
 
     li.appendChild(buttonGroup);
@@ -187,9 +195,9 @@ function createTaskElement(task) {
     return li;
 }
 
-// ===============================
+
 // Complete / Undo Task
-// ===============================
+
 function toggleTask(id) {
 
     const task = tasks.find(function (task) {
@@ -203,9 +211,9 @@ function toggleTask(id) {
     updateTaskElement(task);
 }
 
-// ===============================
+
 // Edit Task
-// ===============================
+
 function editTask(id) {
 
     const task = tasks.find(function (task) {
@@ -214,22 +222,22 @@ function editTask(id) {
 
     });
 
-    // Put task text into input field
+   
     taskInput.value = task.text;
 
     // Save task id
     editingTaskId = id;
 
-    // Change button text
+    
     addTaskBtn.textContent = "Update Task";
 
-    // Focus input
+
     taskInput.focus();
 }
 
-// ===============================
+
 // Delete Task
-// ===============================
+
 function deleteTask(id) {
 
     const index = tasks.findIndex(function (task) {
@@ -246,19 +254,19 @@ function deleteTask(id) {
 
     // If the deleted task was being edited,
     // reset edit mode.
-    if (editingTaskId === id) {
+  if (editingTaskId === id) {
 
-        editingTaskId = null;
+         editingTaskId = null;
 
-        taskInput.value = "";
+         taskInput.value = "";
 
         addTaskBtn.textContent = "Add Task";
-    }
+ }
 }
 
-// ===============================
+
 // Update One Task
-// ===============================
+
 function updateTaskElement(task) {
 
     // Find old element
@@ -266,16 +274,16 @@ function updateTaskElement(task) {
         '[data-id="' + task.id + '"]'
     );
 
-    // Create updated element
+  
     const newElement = createTaskElement(task);
 
-    // Replace old with new
+  
     oldElement.replaceWith(newElement);
 }
 
-// ===============================
+
 // Remove One Task
-// ===============================
+
 function removeTaskElement(id) {
 
     const taskElement = document.querySelector(
