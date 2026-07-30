@@ -99,9 +99,9 @@ h1 {
     color: lightgray;
 }
 
-.complete-btn,
-.edit-btn,
-.delete-btn {
+
+#edit-btn
+ {
     padding: 6px 10px;
     border: none;
     border-radius: 5px;
@@ -116,7 +116,7 @@ h1 {
     background-color: #2bb74c;
 }
 
-.edit-btn {
+#edit-btn {
     background-color: #ffc107;
     color: black;
 }
