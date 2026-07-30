@@ -57,5 +57,5 @@ function createTaskElement(task) {
   li.appendChild(span);
 
   return li;
-  //return lisst to the  createTaskElement()
+// Return the <li> element to renderTask()
 }
