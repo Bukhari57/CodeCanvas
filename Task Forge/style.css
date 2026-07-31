@@ -110,10 +110,9 @@ h1 {
 
 .delete-btn {
   border: none;
-
   cursor: pointer;
   color: rgb(7, 7, 0);
-  padding: 10px 20px;
+  padding: 10px 15px;
   border-radius: 5px;
   background-color: rgb(231, 23, 23);
   
