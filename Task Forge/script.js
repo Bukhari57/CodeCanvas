@@ -33,7 +33,9 @@ function addTask() {
   // Update Existing Task
 
   if (editingTaskId !== null) {
+   
     updateTask(taskText, editingTaskId);
+
     editingTaskId = null;
     // Change button text back
     addTaskBtn.textContent = "Add Task";
@@ -129,9 +131,9 @@ function editTask(id) {
 
 // Update Task
 
-function updateTask(taskText, taskId) {
+function updateTask(taskText, id) {
   const task = tasks.find(function (task) {
-    return task.id === taskId;
+    return task.id === id;
   });
 
   // Update task text
