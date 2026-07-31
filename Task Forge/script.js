@@ -73,7 +73,7 @@ function renderTask(task) {
 function createTaskElement(task) {
   const li = document.createElement("li");
 
-  li.dataset.id = task.id;
+  li.id = task.id;
 
   const span = document.createElement("span");
 
@@ -106,8 +106,7 @@ function createTaskElement(task) {
   //complete button
 
   const completeBtn = document.createElement("button");
-
-  completeBtn.textContent = task.completed ? "Undo" : "Complete";
+  completeBtn.textContent = "Complete";
 
   completeBtn.classList.add("complete-btn");
 
@@ -136,7 +135,7 @@ function toggleTask(taskId) {
 }
 
 function updateCompletedTask(task) {
-  const taskElement = document.querySelector('[data-id="' + task.id + '"]');
+  const taskElement = document.getElementById(String(task.id));
 
   const span = taskElement.querySelector("span");
 
@@ -187,7 +186,7 @@ function updateTask(taskText, id) {
 // Update One Task
 
 function updateTaskElement(task) {
-  const taskElement = document.querySelector('[data-id="' + task.id + '"]');
+  const taskElement = document.getElementById(String(task.id));
 
   const span = taskElement.querySelector("span");
 
@@ -218,7 +217,7 @@ function deleteTask(id) {
 // Remove One TaskElement
 
 function removeTaskElement(id) {
-  const taskElement = document.querySelector('[data-id="' + id + '"]');
+  const taskElement = document.getElementById(String(id));
 
   taskElement.remove();
 }
