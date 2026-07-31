@@ -197,7 +197,6 @@ function updateTaskElement(task) {
 // Delete Task
 
 function deleteTask(id) {
-
   const index = tasks.findIndex(function (task) {
     return task.id === id;
   });
@@ -208,15 +207,12 @@ function deleteTask(id) {
 
   // If deleted task was being edited
   if (editingTaskId === id) {
-
     editingTaskId = null;
 
     taskInput.value = "";
 
     addTaskBtn.textContent = "Add Task";
-
   }
-
 }
 
 // Remove One TaskElement
@@ -226,5 +222,3 @@ function removeTaskElement(id) {
 
   taskElement.remove();
 }
-
-
