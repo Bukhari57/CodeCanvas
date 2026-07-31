@@ -33,6 +33,7 @@ function addTask() {
   // Update Existing Task
 
   if (editingTaskId !== null) {
+   
     updateTask(taskText, editingTaskId);
 
     editingTaskId = null;
@@ -155,21 +156,21 @@ function updateTaskElement(task) {
 // Delete Task
 
 function deleteTask(id) {
-  const index = tasks.findIndex(function (task) {
-    return task.id === id;
-  });
 
   // Remove task from array
-  tasks.splice(index, 1);
+  tasks = tasks.filter(function (task) {
+    return task.id !== id;
+  });
 
   // Remove task from page
   removeTaskElement(id);
+
 }
 
 // Remove One TaskElement
 
 function removeTaskElement(id) {
-  const taskElement = document.querySelector('[data-id="' + id + '"]');
+  const taskElement = document.getElementById('[data-id="' + id + '"]');
 
   taskElement.remove();
 }
