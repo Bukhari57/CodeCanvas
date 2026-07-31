@@ -33,7 +33,6 @@ function addTask() {
   // Update Existing Task
 
   if (editingTaskId !== null) {
-   
     updateTask(taskText, editingTaskId);
 
     editingTaskId = null;
