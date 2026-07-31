@@ -65,8 +65,8 @@ h1 {
 #taskList {
   list-style: none;
   padding: 0;
-   max-height: 350px;
-    overflow-y: auto;
+  max-height: 350px;
+  overflow-y: auto;
 }
 
 #taskList li {
@@ -92,42 +92,45 @@ h1 {
   margin-left: 15px;
 }
 
-.completed span {
+.completed {
   text-decoration: line-through;
   color: lightgray;
 }
 
-.edit-btn {
-  border: none;
+/* Common Button Styles */
 
-  cursor: pointer;
-  color: rgb(7, 7, 0);
-  padding: 10px 20px;
-  border-radius: 5px;
-  background-color: rgb(222, 204, 9);
-  
-}
-
+.edit-btn,
+.complete-btn,
 .delete-btn {
   border: none;
   cursor: pointer;
-  color: rgb(7, 7, 0);
   padding: 10px 15px;
   border-radius: 5px;
-  background-color: rgb(231, 23, 23);
-  
+  color: white;
 }
 
-.complete-btn {
-  background-color: #28a745;
-}
-.complete-btn:hover {
-  background-color: #2bb74c;
+/* Edit Button */
+
+.edit-btn {
+  background-color: rgb(222, 204, 9);
+  color: black;
 }
 
 .edit-btn:hover {
   background-color: #ffe042;
 }
+
+/* Complete Button */
+
+.complete-btn {
+  background-color: #28a745;
+}
+
+.complete-btn:hover {
+  background-color: #2bb74c;
+}
+
+/* Delete Button */
 
 .delete-btn {
   background-color: #bd1f2f;

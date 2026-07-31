@@ -33,7 +33,6 @@ function addTask() {
   // Update Existing Task
 
   if (editingTaskId !== null) {
-   
     updateTask(taskText, editingTaskId);
 
     editingTaskId = null;
@@ -55,6 +54,7 @@ function createTask(taskText) {
   const task = {
     id: Date.now(),
     text: taskText,
+    completed: false,
   };
 
   tasks.push(task);
@@ -103,13 +103,54 @@ function createTaskElement(task) {
     deleteTask(task.id);
   });
 
+  //complete button
+
+  const completeBtn = document.createElement("button");
+
+  completeBtn.textContent = task.completed ? "Undo" : "Complete";
+
+  completeBtn.classList.add("complete-btn");
+
+  completeBtn.addEventListener("click", () => {
+    toggleTask(task.id);
+  });
+
   li.appendChild(span);
 
   li.appendChild(editBtn);
 
   li.appendChild(deleteBtn);
 
+  li.appendChild(completeBtn);
+
   return li;
+}
+//toggle Task
+
+function toggleTask(taskId) {
+  const task = tasks.find((task) => task.id === taskId);
+
+  task.completed = !task.completed;
+
+  updateCompletedTask(task);
+}
+
+function updateCompletedTask(task) {
+  const taskElement = document.querySelector('[data-id="' + task.id + '"]');
+
+  const span = taskElement.querySelector("span");
+
+  const completeBtn = taskElement.querySelector(".complete-btn");
+
+  if (task.completed) {
+    span.classList.add("completed");
+
+    completeBtn.textContent = "Undo";
+  } else {
+    span.classList.remove("completed");
+
+    completeBtn.textContent = "Complete";
+  }
 }
 
 // Edit Task
@@ -157,20 +198,33 @@ function updateTaskElement(task) {
 
 function deleteTask(id) {
 
-  // Remove task from array
-  tasks = tasks.filter(function (task) {
-    return task.id !== id;
+  const index = tasks.findIndex(function (task) {
+    return task.id === id;
   });
 
-  // Remove task from page
+  tasks.splice(index, 1);
+
   removeTaskElement(id);
+
+  // If deleted task was being edited
+  if (editingTaskId === id) {
+
+    editingTaskId = null;
+
+    taskInput.value = "";
+
+    addTaskBtn.textContent = "Add Task";
+
+  }
 
 }
 
 // Remove One TaskElement
 
 function removeTaskElement(id) {
-  const taskElement = document.getElementById('[data-id="' + id + '"]');
+  const taskElement = document.querySelector('[data-id="' + id + '"]');
 
   taskElement.remove();
 }
+
+
