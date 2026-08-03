@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,34 +14,106 @@
 
         <h1>TaskForge</h1>
 
-        <section class="task-input">
+      
 
-      <textarea
-    id="taskInput" required="true"
-    placeholder="Please Enter a task!"
-    rows="1"></textarea>
+        <section class="toolbar">
 
-            <button id="addTaskBtn">Add Task</button>
+            <input
+                type="text"
+                id="searchTask"
+                placeholder="Search tasks...">
+
+            <select id="filterTask">
+                <option value="all">All Tasks</option>
+                <option value="active">Active</option>
+                <option value="completed">Completed</option>
+                <option value="overdue">Overdue</option>
+            </select>
+
+            <select id="sortTask">
+                <option value="default">Sort By</option>
+                <option value="date">Due Date</option>
+                <option value="priority">Priority</option>
+            </select>
 
         </section>
-
-        <p id="errorMessage"></p>
 
         <section class="task-section">
 
             <h2>Task List</h2>
 
-            <ul id="taskList"></ul>
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Task</th>
+                            <th>Due Date</th>
+                            <th>Priority</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="taskList">
+
+                    </tbody>
+
+                </table>
+
+            </div>
 
         </section>
+  <section class="task-input">
 
+            <textarea
+                id="taskInput"
+                placeholder="Enter your task..."
+                rows="2"></textarea>
+
+            <div class="task-details">
+
+                <div class="field">
+                    <label for="dueDate">Due Date</label>
+                    <input
+                        type="date"
+                        id="dueDate">
+                </div>
+
+                <div class="field">
+                    <label for="priority">Priority</label>
+                    <select id="priority">
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label for="category">Category</label>
+                    <select id="category">
+                        <option value="Study">Study</option>
+                        <option value="Work">Work</option>
+                        <option value="Personal">Personal</option>
+                        <option value="Shopping">Shopping</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <button id="addTaskBtn">Add Task</button>
+
+            <p id="errorMessage"></p>
+
+        </section>
     </main>
 
     <script src="script.js"></script>
 
 </body>
+
 </html>
-
-
-
-

@@ -13,12 +13,29 @@ const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
 const errorMessage = document.getElementById("errorMessage");
+const dueDate = document.getElementById("dueDate");
+const priority = document.getElementById("priority");
+const category = document.getElementById("category");
 
 addTaskBtn.addEventListener("click", addTask);
 
 taskInput.addEventListener("input", function () {
   errorMessage.textContent = "";
 });
+
+const setDefaultValues = () => {
+
+    const defaultDate = new Date();
+
+    defaultDate.setDate(defaultDate.getDate() + 5);
+
+    dueDate.value = defaultDate.toISOString().split("T")[0];
+
+    priority.value = "Low";
+
+    category.value = "Study";
+
+};
 
 function addTask() {
   const taskText = taskInput.value.trim();
@@ -46,6 +63,8 @@ function addTask() {
   }
 
   taskInput.value = "";
+
+  setDefaultValues();
 
   taskInput.focus();
 }
@@ -83,7 +102,7 @@ function createTaskElement(task) {
 
   const editBtn = document.createElement("button");
 
-  editBtn.textContent = "Edit";
+  editBtn.textContent = "✏";
 
   editBtn.classList.add("edit-btn");
 
@@ -95,7 +114,7 @@ function createTaskElement(task) {
 
   const deleteBtn = document.createElement("button");
 
-  deleteBtn.textContent = "Delete";
+  deleteBtn.textContent = "🗑";
 
   deleteBtn.classList.add("delete-btn");
 
@@ -106,7 +125,7 @@ function createTaskElement(task) {
   //complete button
 
   const completeBtn = document.createElement("button");
-  completeBtn.textContent = "Complete";
+  completeBtn.textContent = "✔";
 
   completeBtn.classList.add("complete-btn");
 
@@ -144,11 +163,11 @@ function updateCompletedTask(task) {
   if (task.completed) {
     span.classList.add("completed");
 
-    completeBtn.textContent = "Undo";
+    completeBtn.textContent = "↩";
   } else {
     span.classList.remove("completed");
 
-    completeBtn.textContent = "Complete";
+    completeBtn.textContent = "↩";
   }
 }
 
