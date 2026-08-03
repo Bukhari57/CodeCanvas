@@ -2,10 +2,13 @@
 const tasks = [];
 
 // // //  task=[
-// // //{
-// // // id:12000
-// // // text:hello  }
-// // //]
+//     {
+//        id:12000
+//       text:hello
+//       due-date:08-08-2026
+//       priority:low
+//       category:study   }
+//                          ]
 
 let editingTaskId = null;
 
@@ -24,18 +27,19 @@ taskInput.addEventListener("input", function () {
 });
 
 const setDefaultValues = () => {
+  const defaultDate = new Date();
 
-    const defaultDate = new Date();
+  defaultDate.setDate(defaultDate.getDate() + 5);
 
-    defaultDate.setDate(defaultDate.getDate() + 5);
+  dueDate.value = defaultDate.toISOString().split("T")[0];
 
-    dueDate.value = defaultDate.toISOString().split("T")[0];
+  priority.value = "Low";
 
-    priority.value = "Low";
-
-    category.value = "Study";
-
+  category.value = "Study";
 };
+
+// Set the initial default values when the page loads
+setDefaultValues();
 
 function addTask() {
   const taskText = taskInput.value.trim();
@@ -48,7 +52,6 @@ function addTask() {
   errorMessage.textContent = "";
 
   // Update Existing Task
-
   if (editingTaskId !== null) {
     updateTask(taskText, editingTaskId);
 
@@ -56,7 +59,6 @@ function addTask() {
     // Change button text back
     addTaskBtn.textContent = "Add Task";
   }
-
   // Add New Task
   else {
     createTask(taskText);
@@ -71,8 +73,11 @@ function addTask() {
 
 function createTask(taskText) {
   const task = {
-    id: Date.now(),
+    id: String(Date.now()),
     text: taskText,
+    dueDate: dueDate.value,
+    priority: priority.value,
+    category: category.value,
     completed: false,
   };
 
@@ -90,60 +95,68 @@ function renderTask(task) {
 }
 
 function createTaskElement(task) {
-  const li = document.createElement("li");
+  const row = document.createElement("tr");
 
-  li.id = task.id;
+  row.id = task.id;
 
-  const span = document.createElement("span");
+  const taskTd = document.createElement("td");
+  const taskSpan = document.createElement("span");
+  taskSpan.textContent = task.text;
+  taskTd.appendChild(taskSpan);
 
-  span.textContent = task.text;
+  const dueDateTd = document.createElement("td");
+  dueDateTd.textContent = task.dueDate;
 
-  // Edit Button
+  const priorityTd = document.createElement("td");
+  priorityTd.textContent = task.priority;
 
-  const editBtn = document.createElement("button");
+  const categoryTd = document.createElement("td");
+  categoryTd.textContent = task.category;
 
-  editBtn.textContent = "✏";
-
-  editBtn.classList.add("edit-btn");
-
-  editBtn.addEventListener("click", function () {
-    editTask(task.id);
-  });
-
-  // Delete Button
-
-  const deleteBtn = document.createElement("button");
-
-  deleteBtn.textContent = "🗑";
-
-  deleteBtn.classList.add("delete-btn");
-
-  deleteBtn.addEventListener("click", function () {
-    deleteTask(task.id);
-  });
-
-  //complete button
+  const statusTd = document.createElement("td");
+  statusTd.textContent = task.completed ? "Completed" : "Active";
 
   const completeBtn = document.createElement("button");
-  completeBtn.textContent = "✔";
-
+  completeBtn.innerHTML = task.completed
+    ? '<i class="fa-solid fa-rotate-left"></i>'
+    : '<i class="fa-solid fa-check"></i>';
   completeBtn.classList.add("complete-btn");
+  completeBtn.title = task.completed ? "Undo Task" : "Complete Task";
+  completeBtn.addEventListener("click", () => toggleTask(task.id));
 
-  completeBtn.addEventListener("click", () => {
-    toggleTask(task.id);
-  });
+  const editBtn = document.createElement("button");
+  editBtn.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>';
+  editBtn.classList.add("edit-btn");
+  editBtn.title = "Edit Task";
+  editBtn.addEventListener("click", () => editTask(task.id));
 
-  li.appendChild(span);
+  const deleteBtn = document.createElement("button");
+  deleteBtn.innerHTML = '<i class="fa-regular fa-trash-can"></i>';
+  deleteBtn.classList.add("delete-btn");
+  deleteBtn.title = "Delete Task";
+  deleteBtn.addEventListener("click", () => deleteTask(task.id));
 
-  li.appendChild(editBtn);
+  const buttonGroup = document.createElement("div");
+  buttonGroup.classList.add("action-buttons");
 
-  li.appendChild(deleteBtn);
+  buttonGroup.appendChild(completeBtn);
+  buttonGroup.appendChild(editBtn);
+  buttonGroup.appendChild(deleteBtn);
 
-  li.appendChild(completeBtn);
+  const actionsTd = document.createElement("td");
+  actionsTd.appendChild(buttonGroup);
 
-  return li;
+  row.appendChild(taskTd);
+  row.appendChild(dueDateTd);
+  row.appendChild(priorityTd);
+  row.appendChild(categoryTd);
+  row.appendChild(statusTd);
+  row.appendChild(actionsTd);
+
+  return row;
 }
-//toggle Task
+
+// Toggle Task
 
 function toggleTask(taskId) {
   const task = tasks.find((task) => task.id === taskId);
@@ -154,20 +167,21 @@ function toggleTask(taskId) {
 }
 
 function updateCompletedTask(task) {
-  const taskElement = document.getElementById(String(task.id));
+  const taskElement = document.getElementById(task.id);
 
   const span = taskElement.querySelector("span");
-
+  const statusTd = taskElement.children[4];
   const completeBtn = taskElement.querySelector(".complete-btn");
-
   if (task.completed) {
     span.classList.add("completed");
-
-    completeBtn.textContent = "↩";
+    statusTd.textContent = "Completed";
+    completeBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i>';
+    completeBtn.title = "Undo Task";
   } else {
     span.classList.remove("completed");
-
-    completeBtn.textContent = "↩";
+    statusTd.textContent = "Active";
+    completeBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+    completeBtn.title = "Complete Task";
   }
 }
 
@@ -179,6 +193,9 @@ function editTask(id) {
   });
 
   taskInput.value = task.text;
+  dueDate.value = task.dueDate;
+  priority.value = task.priority;
+  category.value = task.category;
 
   // Save task id
   editingTaskId = id;
@@ -195,8 +212,11 @@ function updateTask(taskText, id) {
     return task.id === id;
   });
 
-  // Update task text
+  // Update task fields
   task.text = taskText;
+  task.dueDate = dueDate.value;
+  task.priority = priority.value;
+  task.category = category.value;
 
   // Update only this task in DOM
   updateTaskElement(task);
@@ -205,11 +225,14 @@ function updateTask(taskText, id) {
 // Update One Task
 
 function updateTaskElement(task) {
-  const taskElement = document.getElementById(String(task.id));
+  const taskElement = document.getElementById(task.id);
 
   const span = taskElement.querySelector("span");
-
   span.textContent = task.text;
+
+  taskElement.children[1].textContent = task.dueDate;
+  taskElement.children[2].textContent = task.priority;
+  taskElement.children[3].textContent = task.category;
 }
 
 // Delete Task
@@ -221,9 +244,12 @@ function deleteTask(id) {
 
   tasks.splice(index, 1);
 
-  removeTaskElement(id);
+  const taskElement = document.getElementById(id);
+
+  taskElement.remove();
 
   // If deleted task was being edited
+  //reset the edit
   if (editingTaskId === id) {
     editingTaskId = null;
 
@@ -231,12 +257,4 @@ function deleteTask(id) {
 
     addTaskBtn.textContent = "Add Task";
   }
-}
-
-// Remove One TaskElement
-
-function removeTaskElement(id) {
-  const taskElement = document.getElementById(String(id));
-
-  taskElement.remove();
 }
