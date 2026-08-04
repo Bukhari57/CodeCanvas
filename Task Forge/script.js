@@ -115,13 +115,14 @@ function createTaskElement(task) {
 
   const statusTd = document.createElement("td");
   statusTd.textContent = task.completed ? "Completed" : "Active";
-
   const completeBtn = document.createElement("button");
-  completeBtn.innerHTML = task.completed
-    ? '<i class="fa-solid fa-rotate-left"></i>'
-    : '<i class="fa-solid fa-check"></i>';
+
+  completeBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+
   completeBtn.classList.add("complete-btn");
-  completeBtn.title = task.completed ? "Undo Task" : "Complete Task";
+
+  completeBtn.title = "Complete";
+
   completeBtn.addEventListener("click", () => toggleTask(task.id));
 
   const editBtn = document.createElement("button");
@@ -175,14 +176,13 @@ function updateCompletedTask(task) {
   if (task.completed) {
     span.classList.add("completed");
     statusTd.textContent = "Completed";
-    completeBtn.innerHTML = '<i class="fa-solid fa-rotate-left"></i>';
-    completeBtn.title = "Undo Task";
   } else {
     span.classList.remove("completed");
     statusTd.textContent = "Active";
-    completeBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
-    completeBtn.title = "Complete Task";
   }
+
+  completeBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
+  completeBtn.title = "Complete";
 }
 
 // Edit Task
