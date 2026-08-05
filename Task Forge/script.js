@@ -11,7 +11,8 @@ const tasks = [];
 //                          ]
 
 let editingTaskId = null;
-
+let searchTimeout;
+const searchInput = document.getElementById("searchInput");
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
 const taskList = document.getElementById("taskList");
@@ -19,6 +20,82 @@ const errorMessage = document.getElementById("errorMessage");
 const dueDate = document.getElementById("dueDate");
 const priority = document.getElementById("priority");
 const category = document.getElementById("category");
+
+const segButtons = document.querySelectorAll(".seg-btn");
+
+const taskModal = document.getElementById("taskModal");
+const taskModalTitle = document.getElementById("taskModalTitle");
+const openModalBtn = document.getElementById("openAddTaskBtn");
+const cancelTaskBtn = document.getElementById("cancelTaskBtn");
+const closeModalBtn = document.getElementById("closeTaskModalBtn");
+
+openModalBtn.addEventListener("click", () => {
+  openModal();
+});
+closeModalBtn.addEventListener("click", () => {
+  closeModal();
+});
+
+cancelTaskBtn.addEventListener("click", () => {
+  closeModal();
+});
+
+searchInput.addEventListener("input", function () {
+  clearTimeout(searchTimeout);
+
+  searchTimeout = setTimeout(function () {
+    searchTasks();
+  }, 500);
+});
+//search task
+function searchTasks() {
+  const searchText = searchInput.value.toLowerCase();
+  const filteredTasks = tasks.filter(function (task) {
+    return task.text.toLowerCase().includes(searchText);
+  });
+
+  displayFilteredTasks(filteredTasks);
+}
+
+//display filtered task
+function displayFilteredTasks(taskArray) {
+  taskList.innerHTML = "";
+
+  taskArray.forEach(function (task) {
+    renderTask(task);
+  });
+}
+
+function openModal() {
+  taskModal.classList.remove("hidden");
+  taskInput.focus();
+}
+
+function closeModal() {
+  taskModal.classList.add("hidden");
+  editingTaskId = null;
+  addTaskBtn.textContent = "Add Task";
+  taskInput.value = "";
+  setDefaultValues();
+}
+
+segButtons.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    setPriority(btn.dataset.value);
+  });
+});
+
+function setPriority(value) {
+  priority.value = value;
+
+  segButtons.forEach((btn) => {
+    if (btn.dataset.value === value) {
+      btn.classList.add("active"); // isko highlight karo
+    } else {
+      btn.classList.remove("active"); // baqi sab se hatao
+    }
+  });
+}
 
 addTaskBtn.addEventListener("click", addTask);
 
@@ -33,7 +110,7 @@ const setDefaultValues = () => {
 
   dueDate.value = defaultDate.toISOString().split("T")[0];
 
-  priority.value = "Low";
+  setPriority("Low");
 
   category.value = "Study";
 };
@@ -55,7 +132,6 @@ function addTask() {
   if (editingTaskId !== null) {
     updateTask(taskText, editingTaskId);
 
-    editingTaskId = null;
     // Change button text back
     addTaskBtn.textContent = "Add Task";
   }
@@ -64,11 +140,7 @@ function addTask() {
     createTask(taskText);
   }
 
-  taskInput.value = "";
-
-  setDefaultValues();
-
-  taskInput.focus();
+  closeModal();
 }
 
 function createTask(taskText) {
@@ -108,7 +180,11 @@ function createTaskElement(task) {
   dueDateTd.textContent = task.dueDate;
 
   const priorityTd = document.createElement("td");
-  priorityTd.textContent = task.priority;
+  const priorityPill = document.createElement("span");
+  priorityPill.textContent = task.priority;
+  priorityPill.classList.add("pill");
+  priorityPill.dataset.priority = task.priority;
+  priorityTd.appendChild(priorityPill);
 
   const categoryTd = document.createElement("td");
   categoryTd.textContent = task.category;
@@ -194,15 +270,14 @@ function editTask(id) {
 
   taskInput.value = task.text;
   dueDate.value = task.dueDate;
-  priority.value = task.priority;
+  setPriority(task.priority);
   category.value = task.category;
 
   // Save task id
   editingTaskId = id;
 
   addTaskBtn.textContent = "Update Task";
-
-  taskInput.focus();
+  openModal();
 }
 
 // Update Task

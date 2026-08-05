@@ -14,9 +14,20 @@
   <body>
     <main class="app">
       <h1>TaskForge</h1>
+      <p class="tagline">Plan it, track it, forge it done.</p>
+
+      <div class="top-actions">
+        <button id="openAddTaskBtn" class="add-task-trigger">
+          <i class="fa-solid fa-plus"></i> Add Task
+        </button>
+      </div>
 
       <section class="toolbar">
-        <input type="text" id="searchTask" placeholder="Search tasks..." />
+        <div class="search-container">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+
+          <input type="text" id="searchInput" placeholder="Search tasks..." />
+        </div>
 
         <select id="filterTask">
           <option value="all">All Tasks</option>
@@ -52,44 +63,69 @@
           </table>
         </div>
       </section>
-      <section class="task-input">
-        <textarea
-          id="taskInput"
-          placeholder="Enter your task..."
-          rows="2"
-        ></textarea>
-
-        <div class="task-details">
-          <div class="field">
-            <label for="dueDate">Due Date</label>
-            <input type="date" id="dueDate" />
-          </div>
-
-          <div class="field">
-            <label for="priority">Priority</label>
-            <select id="priority">
-              <option value="High">High</option>
-              <option value="Medium" selected>Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="category">Category</label>
-            <select id="category">
-              <option value="Study">Study</option>
-              <option value="Work">Work</option>
-              <option value="Personal">Personal</option>
-              <option value="Shopping">Shopping</option>
-            </select>
-          </div>
-        </div>
-
-        <button id="addTaskBtn">Add Task</button>
-
-        <p id="errorMessage"></p>
-      </section>
     </main>
+
+    <!-- Add / Edit Task Modal -->
+    <div id="taskModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 id="taskModalTitle">Add Task</h3>
+
+          <button id="closeTaskModalBtn" class="icon-close-btn" title="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <p id="tagline2">Plan it, track it, forge it done.</p>
+
+        <section class="task-input">
+          <textarea
+            id="taskInput"
+            placeholder="Enter your task..."
+            rows="2"
+          ></textarea>
+
+          <div class="task-details">
+            <div class="field">
+              <label for="dueDate">Due Date</label>
+              <input type="date" id="dueDate" />
+            </div>
+
+            <div class="field">
+              <label for="category">Category</label>
+              <select id="category">
+                <option value="Study">Study</option>
+                <option value="Work">Work</option>
+                <option value="Personal">Personal</option>
+                <option value="Shopping">Shopping</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Priority</label>
+            <div class="segmented" id="prioritySegmented">
+              <button type="button" class="seg-btn" data-value="High">
+                High
+              </button>
+              <button type="button" class="seg-btn" data-value="Medium">
+                Medium
+              </button>
+              <button type="button" class="seg-btn" data-value="Low">
+                Low
+              </button>
+            </div>
+            <input type="hidden" id="priority" value="Medium" />
+          </div>
+
+          <p id="errorMessage"></p>
+
+          <div class="modal-actions">
+            <button id="cancelTaskBtn" class="cancel-btn">Cancel</button>
+            <button id="addTaskBtn" class="confirm-btn">Add Task</button>
+          </div>
+        </section>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
