@@ -56,7 +56,7 @@ taskInput.addEventListener("input", () => {
 searchInput.addEventListener("input", function () {
   clearTimeout(searchTimeout);
 
-  searchTimeout = setTimeout(searchTasks(), 500);
+  searchTimeout = setTimeout(searchTasks, 500);
 });
 
 //filter task
