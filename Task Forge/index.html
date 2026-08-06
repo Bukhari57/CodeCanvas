@@ -33,7 +33,6 @@
           <option value="all">All Tasks</option>
           <option value="active">Active</option>
           <option value="completed">Completed</option>
-          <option value="overdue">Overdue</option>
         </select>
 
         <select id="sortTask">
@@ -65,7 +64,6 @@
       </section>
     </main>
 
-    <!-- Add / Edit Task Modal -->
     <div id="taskModal" class="modal hidden">
       <div class="modal-content">
         <div class="modal-header">
@@ -78,8 +76,13 @@
         <p id="tagline2">Plan it, track it, forge it done.</p>
 
         <section class="task-input">
+          <div class="task-input-header">
+            <label for="taskInput">Task</label>
+            <span id="charCount">0 / 200</span>
+          </div>
           <textarea
             id="taskInput"
+            maxlength="200"
             placeholder="Enter your task..."
             rows="2"
           ></textarea>

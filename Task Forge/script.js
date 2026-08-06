@@ -12,6 +12,9 @@ const tasks = [];
 
 let editingTaskId = null;
 let searchTimeout;
+const filterTask = document.getElementById("filterTask");
+const sortTask = document.getElementById("sortTask");
+const charCount = document.getElementById("charCount");
 const searchInput = document.getElementById("searchInput");
 const taskInput = document.getElementById("taskInput");
 const addTaskBtn = document.getElementById("addTaskBtn");
@@ -29,6 +32,10 @@ const openModalBtn = document.getElementById("openAddTaskBtn");
 const cancelTaskBtn = document.getElementById("cancelTaskBtn");
 const closeModalBtn = document.getElementById("closeTaskModalBtn");
 
+filterTask.addEventListener("change", filterTasks);
+
+sortTask.addEventListener("change", sortTasks);
+
 openModalBtn.addEventListener("click", () => {
   openModal();
 });
@@ -40,13 +47,63 @@ cancelTaskBtn.addEventListener("click", () => {
   closeModal();
 });
 
+taskInput.addEventListener("input", () => {
+  errorMessage.textContent = "";
+
+  charCount.textContent = `${taskInput.value.length} / 200`;
+});
+
 searchInput.addEventListener("input", function () {
   clearTimeout(searchTimeout);
 
-  searchTimeout = setTimeout(function () {
-    searchTasks();
-  }, 500);
+  searchTimeout = setTimeout(searchTasks(), 500);
 });
+
+//filter task
+function filterTasks() {
+  const filterValue = filterTask.value;
+
+  let filtered = tasks;
+
+  if (filterValue === "active") {
+    filtered = tasks.filter((task) => {
+      return task.completed === false;
+    });
+  } else if (filterValue === "completed") {
+    filtered = tasks.filter((task) => {
+      return task.completed === true;
+    });
+  }
+  // agar "all" selected ho to filtered = tasks hi rahega, koi change nahi
+
+  displayFilteredTasks(filtered);
+}
+
+//sort tasks
+function sortTasks() {
+  const sortType = sortTask.value;
+
+  if (sortType === "default") {
+    displayFilteredTasks(tasks);
+    return;
+  }
+
+  let sortedTasks = [...tasks]; // original ki copy bana li
+
+  if (sortType === "priority") {
+    const priorityOrder = { High: 3, Medium: 2, Low: 1 };
+
+    sortedTasks.sort((a, b) => {
+      return priorityOrder[b.priority] - priorityOrder[a.priority];
+    });
+  } else if (sortType === "date") {
+    sortedTasks.sort((a, b) => {
+      return new Date(a.dueDate) - new Date(b.dueDate);
+    });
+  }
+
+  displayFilteredTasks(sortedTasks); // sorted copy display ho rahi hai original tasks safe hai
+}
 //search task
 function searchTasks() {
   const searchText = searchInput.value.toLowerCase();
@@ -76,6 +133,7 @@ function closeModal() {
   editingTaskId = null;
   addTaskBtn.textContent = "Add Task";
   taskInput.value = "";
+  charCount.textContent = "0 / 200";
   setDefaultValues();
 }
 
@@ -98,10 +156,6 @@ function setPriority(value) {
 }
 
 addTaskBtn.addEventListener("click", addTask);
-
-taskInput.addEventListener("input", function () {
-  errorMessage.textContent = "";
-});
 
 const setDefaultValues = () => {
   const defaultDate = new Date();
@@ -155,7 +209,7 @@ function createTask(taskText) {
 
   tasks.push(task);
 
-  renderTask(task);
+  sortTasks();
 }
 
 // Render One Task
@@ -269,6 +323,7 @@ function editTask(id) {
   });
 
   taskInput.value = task.text;
+  charCount.textContent = `${task.text.length} / 200`;
   dueDate.value = task.dueDate;
   setPriority(task.priority);
   category.value = task.category;

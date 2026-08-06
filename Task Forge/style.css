@@ -20,14 +20,14 @@ body {
 
 h1 {
   text-align: center;
-  font-size: 19px;
+  font-size: 22px;
   margin-bottom: 2px;
 }
 
 .tagline {
   text-align: center;
   color: rgba(255, 255, 255, 0.65);
-  font-size: 11px;
+  font-size: 15px;
   margin-bottom: 12px;
 }
 
@@ -99,7 +99,8 @@ table {
   width: 100%;
   min-width: 640px;
   border-collapse: collapse;
-  font-size: 12px;
+  /* Fluid font size: scales smoothly between screen sizes instead of jumping at breakpoints */
+  font-size: clamp(12px, 1.8vw, 15px);
 }
 
 thead {
@@ -111,12 +112,12 @@ thead {
 
 th,
 td {
-  padding: 5px 6px;
+  padding: 8px 10px;
   text-align: center;
 }
 
 th {
-  font-size: 10.5px;
+  font-size: clamp(10px, 1.5vw, 13px);
   text-transform: uppercase;
   letter-spacing: 0.03em;
 }
@@ -244,8 +245,8 @@ tbody tr:hover {
 }
 
 .modal-content {
-  width: 100%;
-  max-width: 340px;
+  width: 45%;
+  max-width: 700px;
   max-height: 85vh;
   overflow-y: auto;
   background: #17323b;
@@ -405,38 +406,11 @@ tbody tr:hover {
   background: #5eead4;
 }
 
-@media (max-width: 768px) {
-  .toolbar {
-    flex-direction: column;
-  }
-
-  .toolbar input,
-  .toolbar select {
-    width: 100%;
-  }
-
-  .task-details {
-    grid-template-columns: 1fr;
-  }
-
-  table {
-    min-width: 640px;
-  }
-
-  .table-container {
-    max-height: 260px;
-  }
-
-  .modal-content {
-    max-width: 100%;
-  }
-}
-
 .pill {
   display: inline-block;
   padding: 4px 12px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -465,6 +439,7 @@ tbody tr:hover {
 .search-container {
   position: relative;
   width: 300px;
+  max-width: 100%;
 }
 
 .search-container input {
@@ -480,4 +455,65 @@ tbody tr:hover {
   transform: translateY(-50%);
   color: gray;
   pointer-events: none;
+}
+
+.task-input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+#charCount {
+  font-size: 13px;
+  color: #777;
+}
+
+@media (max-width: 768px) {
+  .toolbar {
+    flex-direction: column;
+  }
+
+  .toolbar input,
+  .toolbar select {
+    width: 100%;
+  }
+
+  .task-details {
+    grid-template-columns: 1fr;
+  }
+
+  table {
+    min-width: 640px;
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: 6px 8px;
+  }
+
+  .table-container {
+    max-height: 260px;
+  }
+
+  .modal-content {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    width: 100%;
+    margin: 8px auto;
+    padding: 0 6px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  .modal-content {
+    padding: 12px;
+  }
 }
