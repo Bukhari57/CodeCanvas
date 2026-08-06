@@ -12,6 +12,11 @@ const tasks = [];
 
 let editingTaskId = null;
 let searchTimeout;
+
+const totalTasks = document.getElementById("totalTasks");
+const completedTasks = document.getElementById("completedTasks");
+const activeTasks = document.getElementById("activeTasks");
+const categoryCount = document.getElementById("categoryCount");
 const filterTask = document.getElementById("filterTask");
 const sortTask = document.getElementById("sortTask");
 const charCount = document.getElementById("charCount");
@@ -171,6 +176,7 @@ const setDefaultValues = () => {
 
 // Set the initial default values when the page loads
 setDefaultValues();
+loadTasks();
 
 function addTask() {
   const taskText = taskInput.value.trim();
@@ -208,6 +214,10 @@ function createTask(taskText) {
   };
 
   tasks.push(task);
+
+  saveTasks();
+
+  updateStatistics();
 
   sortTasks();
 }
@@ -251,7 +261,7 @@ function createTaskElement(task) {
 
   completeBtn.classList.add("complete-btn");
 
-  completeBtn.title = "Complete";
+  completeBtn.title = "Mark as Completed";
 
   completeBtn.addEventListener("click", () => toggleTask(task.id));
 
@@ -293,6 +303,9 @@ function toggleTask(taskId) {
   const task = tasks.find((task) => task.id === taskId);
 
   task.completed = !task.completed;
+  saveTasks();
+
+  updateStatistics();
 
   updateCompletedTask(task);
 }
@@ -347,7 +360,9 @@ function updateTask(taskText, id) {
   task.dueDate = dueDate.value;
   task.priority = priority.value;
   task.category = category.value;
+  saveTasks();
 
+  updateStatistics();
   // Update only this task in DOM
   updateTaskElement(task);
 }
@@ -374,6 +389,10 @@ function deleteTask(id) {
 
   tasks.splice(index, 1);
 
+  saveTasks();
+
+  updateStatistics();
+
   const taskElement = document.getElementById(id);
 
   taskElement.remove();
@@ -387,4 +406,42 @@ function deleteTask(id) {
 
     addTaskBtn.textContent = "Add Task";
   }
+}
+
+function saveTasks() {
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function loadTasks() {
+  const savedTasks = localStorage.getItem("tasks");
+
+  if (!savedTasks) return;
+
+  const parsedTasks = JSON.parse(savedTasks);
+
+  parsedTasks.forEach((task) => {
+    tasks.push(task);
+  });
+
+  updateStatistics();
+
+  sortTasks();
+}
+
+function updateStatistics() {
+  // Total Tasks
+  totalTasks.textContent = tasks.length;
+
+  // Completed Tasks
+  const completed = tasks.filter((task) => task.completed).length;
+  completedTasks.textContent = completed;
+
+  // Active Tasks
+  const active = tasks.filter((task) => !task.completed).length;
+  activeTasks.textContent = active;
+
+  // Distinct Categories
+  const uniqueCategories = new Set(tasks.map((task) => task.category));
+
+  categoryCount.textContent = uniqueCategories.size;
 }

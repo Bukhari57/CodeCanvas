@@ -5,11 +5,12 @@
 }
 
 body {
+  margin-top: 10px;
   font-family: Arial, sans-serif;
   font-size: 14px;
   background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
   color: #fff;
-  min-height: 100vh;
+  min-height: 97vh;
 }
 
 .app {
@@ -63,8 +64,7 @@ h1 {
   margin-bottom: 12px;
 }
 
-.toolbar input,
-.toolbar select {
+.toolbar input {
   flex: 1;
   min-width: 160px;
   height: 32px;
@@ -72,6 +72,27 @@ h1 {
   border-radius: 6px;
   padding: 0 10px;
   font-size: 12px;
+}
+
+.toolbar select {
+  flex: 1;
+  min-width: 160px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  padding: 0 24px 0 10px;
+  font-size: 12px;
+
+  /* remove native dropdown arrow so we can position our own */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  /* custom arrow, positioned further left via the "right" offset below */
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%23555'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 18px center;
+  background-size: 10px 6px;
 }
 
 .task-section {
@@ -87,11 +108,9 @@ h1 {
   margin-bottom: 6px;
 }
 
-/* Keep the task list from growing too tall - scrolls internally instead */
+/* Table container: horizontal scroll only, no vertical scroll/max-height */
 .table-container {
   overflow-x: auto;
-  overflow-y: auto;
-  max-height: 280px;
   border-radius: 8px;
 }
 
@@ -105,9 +124,6 @@ table {
 
 thead {
   background: rgba(0, 0, 0, 0.35);
-  position: sticky;
-  top: 0;
-  z-index: 1;
 }
 
 th,
@@ -493,10 +509,6 @@ tbody tr:hover {
     padding: 6px 8px;
   }
 
-  .table-container {
-    max-height: 260px;
-  }
-
   .modal-content {
     max-width: 100%;
   }
@@ -516,4 +528,66 @@ tbody tr:hover {
   .modal-content {
     padding: 12px;
   }
+}
+
+.stats-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  transition: 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.stat-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-size: 20px;
+}
+
+.stat-icon.total {
+  background: #3b82f6;
+}
+
+.stat-icon.completed {
+  background: #22c55e;
+}
+
+.stat-icon.active {
+  background: #f59e0b;
+}
+
+.stat-icon.category {
+  background: #8b5cf6;
+}
+
+.stat-info h3 {
+  font-size: 28px;
+  margin-bottom: 3px;
+}
+
+.stat-info p {
+  color: #d1d5db;
+  font-size: 13px;
 }
