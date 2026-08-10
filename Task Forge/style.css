@@ -591,3 +591,21 @@ tbody tr:hover {
   color: #d1d5db;
   font-size: 13px;
 }
+#quoteBox {
+  width: 70%;
+  max-width: 450px;
+  margin: 20px auto;
+  padding: 24px 30px;
+  border-left: 4px solid #4dc6bc;
+  border-radius: 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+#quoteText {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.2;
+  font-style: italic;
+  color: #333;
+}

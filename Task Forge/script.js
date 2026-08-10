@@ -12,7 +12,7 @@ const tasks = [];
 
 let editingTaskId = null;
 let searchTimeout;
-
+const quoteText = document.getElementById("quoteText");
 const totalTasks = document.getElementById("totalTasks");
 const completedTasks = document.getElementById("completedTasks");
 const activeTasks = document.getElementById("activeTasks");
@@ -177,6 +177,7 @@ const setDefaultValues = () => {
 // Set the initial default values when the page loads
 setDefaultValues();
 loadTasks();
+loadQuote();
 
 function addTask() {
   const taskText = taskInput.value.trim();
@@ -217,7 +218,7 @@ function createTask(taskText) {
 
   saveTasks();
 
-  updateStatistics();
+  calculateStatistics();
 
   sortTasks();
 }
@@ -305,7 +306,7 @@ function toggleTask(taskId) {
   task.completed = !task.completed;
   saveTasks();
 
-  updateStatistics();
+  updateCompletedStatistics(task);
 
   updateCompletedTask(task);
 }
@@ -362,7 +363,7 @@ function updateTask(taskText, id) {
   task.category = category.value;
   saveTasks();
 
-  updateStatistics();
+  calculateStatistics();
   // Update only this task in DOM
   updateTaskElement(task);
 }
@@ -391,8 +392,7 @@ function deleteTask(id) {
 
   saveTasks();
 
-  updateStatistics();
-
+  calculateStatistics();
   const taskElement = document.getElementById(id);
 
   taskElement.remove();
@@ -423,25 +423,62 @@ function loadTasks() {
     tasks.push(task);
   });
 
-  updateStatistics();
+  calculateStatistics();
 
   sortTasks();
 }
 
-function updateStatistics() {
-  // Total Tasks
+function calculateStatistics() {
   totalTasks.textContent = tasks.length;
 
-  // Completed Tasks
-  const completed = tasks.filter((task) => task.completed).length;
+  const completed = tasks.filter((task) => {
+    return task.completed;
+  }).length;
+
   completedTasks.textContent = completed;
 
-  // Active Tasks
-  const active = tasks.filter((task) => !task.completed).length;
+  const active = tasks.filter((task) => {
+    return !task.completed;
+  }).length;
+
   activeTasks.textContent = active;
 
-  // Distinct Categories
-  const uniqueCategories = new Set(tasks.map((task) => task.category));
+  const uniqueCategories = new Set(
+    tasks.map((task) => {
+      return task.category;
+    }),
+  );
 
   categoryCount.textContent = uniqueCategories.size;
+}
+
+function updateCompletedStatistics(task) {
+  if (task.completed) {
+    completedTasks.textContent = Number(completedTasks.textContent) + 1;
+
+    activeTasks.textContent = Number(activeTasks.textContent) - 1;
+  } else {
+    completedTasks.textContent = Number(completedTasks.textContent) - 1;
+
+    activeTasks.textContent = Number(activeTasks.textContent) + 1;
+  }
+}
+
+async function loadQuote() {
+  quoteText.textContent = "Loading motivational quote...";
+
+  try {
+    const response = await fetch("https://dummyjson.com/quotes/random");
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch quote");
+    }
+
+    const data = await response.json();
+
+    quoteText.textContent = `"${data.quote}" — ${data.author}`;
+  } catch (error) {
+    quoteText.textContent =
+      "Unable to load today's quote. Please check your internet connection.";
+  }
 }
