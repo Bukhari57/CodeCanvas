@@ -479,6 +479,6 @@ async function loadQuote() {
     quoteText.textContent = `"${data.quote}" — ${data.author}`;
   } catch (error) {
     quoteText.textContent =
-      "Unable to load today's quote. Please check your internet connection.";
+      "Unable to load quote. Please check your internet connection.";
   }
 }
