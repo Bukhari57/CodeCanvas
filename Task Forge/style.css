@@ -34,6 +34,7 @@ h1 {
 
 .top-actions {
   display: flex;
+  gap: 10px;
   justify-content: flex-end;
   margin-bottom: 16px;
 }
@@ -592,8 +593,8 @@ tbody tr:hover {
   font-size: 13px;
 }
 #quoteBox {
-  width: 70%;
-  max-width: 450px;
+  width: 100%;
+  max-width: 760px; /* .app wali max-width match karayi */
   margin: 20px auto;
   padding: 24px 30px;
   border-left: 4px solid #4dc6bc;
@@ -601,11 +602,41 @@ tbody tr:hover {
   background-color: #f8f9fa;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
-
 #quoteText {
   margin: 0;
   font-size: 12px;
   line-height: 1.2;
   font-style: italic;
   color: #333;
+}
+#exportCsvBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 16px;
+  padding-right: 10px;
+  border: currentColor;
+  border-radius: 10px;
+  background-color: #2f80ed;
+  color: white;
+  font-size: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#exportCsvBtn:hover {
+  background-color: #1f6fd1;
+}
+
+#exportCsvBtn i {
+  font-size: 16px;
+}
+#exportErrorMessage {
+  color: #ff8080;
+  font-size: 12px;
+  text-align: right;
+  min-height: 16px;
+  margin-top: -8px;
+  margin-bottom: 12px;
 }

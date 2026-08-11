@@ -12,6 +12,8 @@ const tasks = [];
 
 let editingTaskId = null;
 let searchTimeout;
+const exportErrorMessage = document.getElementById("exportErrorMessage");
+const exportCsvBtn = document.getElementById("exportCsvBtn");
 const quoteText = document.getElementById("quoteText");
 const totalTasks = document.getElementById("totalTasks");
 const completedTasks = document.getElementById("completedTasks");
@@ -36,6 +38,8 @@ const taskModalTitle = document.getElementById("taskModalTitle");
 const openModalBtn = document.getElementById("openAddTaskBtn");
 const cancelTaskBtn = document.getElementById("cancelTaskBtn");
 const closeModalBtn = document.getElementById("closeTaskModalBtn");
+
+exportCsvBtn.addEventListener("click", exportCSV);
 
 filterTask.addEventListener("change", filterTasks);
 
@@ -481,4 +485,72 @@ async function loadQuote() {
     quoteText.textContent =
       "Unable to load quote. Please check your internet connection.";
   }
+}
+
+function exportCSV() {
+  if (tasks.length === 0) {
+    exportErrorMessage.textContent = "No tasks to export!";
+    return;
+  }
+
+  exportErrorMessage.textContent = "";
+
+  const headers = [
+    "id",
+    "text",
+    "dueDate",
+    "priority",
+    "category",
+    "completed",
+  ];
+
+  const rows = tasks.map(function (task) {
+    return [
+      task.id,
+      escapeCSVField(task.text),
+      task.dueDate,
+      task.priority,
+      task.category,
+      task.completed,
+    ].join(",");
+  });
+
+  const csvContent = [headers.join(","), ...rows].join("\n");
+
+  const blob = new Blob([csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
+
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "taskforge-tasks.csv";
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  document.body.removeChild(link);
+
+  URL.revokeObjectURL(url);
+}
+
+// Field ko safe banata hai agar usme comma, double-quote, ya newline ho
+function escapeCSVField(field) {
+  const stringField = String(field);
+
+  const needsQuoting =
+    stringField.includes(",") ||
+    stringField.includes('"') ||
+    stringField.includes("\n");
+
+  if (needsQuoting) {
+    const escapedField = stringField.replace(/"/g, '""');
+
+    return `"${escapedField}"`;
+  }
+
+  return stringField;
 }
