@@ -184,6 +184,7 @@ loadTasks();
 loadQuote();
 
 function addTask() {
+  exportErrorMessage.textContent = "";
   const taskText = taskInput.value.trim();
 
   if (taskText === "") {
@@ -493,7 +494,7 @@ function exportCSV() {
     return;
   }
 
-  exportErrorMessage.textContent = "";
+
 
   const headers = [
     "id",
