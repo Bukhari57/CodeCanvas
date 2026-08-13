@@ -505,7 +505,7 @@ function exportCSV() {
     "completed",
   ];
 
-  const rows = tasks.map(function (task) {
+  const rows = tasks.map( (task)=> {
     return [
       task.id,
       escapeCSVField(task.text),
