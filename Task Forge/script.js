@@ -12,6 +12,8 @@ const tasks = [];
 
 let editingTaskId = null;
 let searchTimeout;
+const importCsvBtn = document.getElementById("importCsvBtn");
+const importCsvInput = document.getElementById("importCsvInput");
 const exportErrorMessage = document.getElementById("exportErrorMessage");
 const exportCsvBtn = document.getElementById("exportCsvBtn");
 const quoteText = document.getElementById("quoteText");
@@ -40,6 +42,26 @@ const cancelTaskBtn = document.getElementById("cancelTaskBtn");
 const closeModalBtn = document.getElementById("closeTaskModalBtn");
 
 exportCsvBtn.addEventListener("click", exportCSV);
+
+importCsvBtn.addEventListener("click", () => {
+  importCsvInput.click();
+});
+
+importCsvInput.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+  //loading ke baad ye chalyga
+  reader.onload = (e) => {
+    importCSV(e.target.result);
+  };
+
+  reader.readAsText(file);
+
+  event.target.value = "";
+});
 
 filterTask.addEventListener("change", filterTasks);
 
@@ -494,8 +516,6 @@ function exportCSV() {
     return;
   }
 
-
-
   const headers = [
     "id",
     "text",
@@ -505,10 +525,10 @@ function exportCSV() {
     "completed",
   ];
 
-  const rows = tasks.map( (task)=> {
+  const rows = tasks.map((task) => {
     return [
       task.id,
-      escapeCSVField(task.text),
+      CSVField(task.text),
       task.dueDate,
       task.priority,
       task.category,
@@ -539,7 +559,7 @@ function exportCSV() {
 }
 
 // Field ko safe banata hai agar usme comma, double-quote, ya newline ho
-function escapeCSVField(field) {
+function CSVField(field) {
   const stringField = String(field);
 
   const needsQuoting =
@@ -554,4 +574,98 @@ function escapeCSVField(field) {
   }
 
   return stringField;
+}
+
+function importCSV(csvText) {
+  const rows = parseCSV(csvText);
+
+  if (rows.length === 0) {
+    exportErrorMessage.style.color = "#ff8080";
+    exportErrorMessage.textContent = "CSV file is empty or invalid.";
+    return;
+  }
+
+  let addedCount = 0;
+  let updatedCount = 0;
+
+  rows.forEach((row) => {
+    const existingTask = tasks.find((task) => task.id === row.id);
+
+    if (existingTask) {
+      // Existing task update karo
+      existingTask.text = row.text;
+      existingTask.dueDate = row.dueDate;
+      existingTask.priority = row.priority;
+      existingTask.category = row.category;
+      existingTask.completed = row.completed === "true";
+      updatedCount++;
+    } else {
+      // Naya task add karo
+      tasks.push({
+        id:
+          row.id && row.id.trim() !== ""
+            ? row.id
+            : String(Date.now() + Math.random()),
+        text: row.text,
+        dueDate: row.dueDate,
+        priority: row.priority,
+        category: row.category,
+        completed: row.completed === "true",
+      });
+      addedCount++;
+    }
+  });
+
+  saveTasks();
+  calculateStatistics();
+  sortTasks();
+
+  exportErrorMessage.style.color = "#4ade80";
+  exportErrorMessage.textContent = `Tasks: ${addedCount} added, ${updatedCount} updated.`;
+}
+
+function parseCSV(csvText) {
+  // Excel ka invisible BOM character hata do agar file ke shuru mein ho
+  const cleanText = csvText.replace(/^\uFEFF/, "");
+
+  const lines = cleanText.trim().split("\n");
+  const headers = parseCSVLine(lines[0]);
+
+  const result = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() === "") continue;
+
+    const values = parseCSVLine(lines[i]);
+    const row = {};
+
+    headers.forEach((header, index) => {
+      row[header.trim()] = values[index] ? values[index].trim() : "";
+    });
+
+    result.push(row);
+  }
+
+  return result;
+}
+function parseCSVLine(line) {
+  const values = [];
+  let current = "";
+  let insideQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+
+    if (char === '"') {
+      insideQuotes = !insideQuotes;
+    } else if (char === "," && !insideQuotes) {
+      values.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+
+  values.push(current);
+  return values;
 }

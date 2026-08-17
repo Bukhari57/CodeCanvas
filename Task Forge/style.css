@@ -640,3 +640,25 @@ tbody tr:hover {
   margin-top: -8px;
   margin-bottom: 12px;
 }
+#importCsvBtn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: #2dd4bf;
+  color: #06231f;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+#importCsvBtn:hover {
+  background-color: #5eead4;
+}
+
+#importCsvBtn i {
+  font-size: 16px;
+}
