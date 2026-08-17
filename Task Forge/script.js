@@ -575,6 +575,13 @@ function CSVField(field) {
 
   return stringField;
 }
+const allowedPriorities = ["Low", "Medium", "High"];
+
+const allowedCategories = ["Study", "Work", "Personal", "Shopping"];
+
+function isValidDate(date) {
+  return /^\d{4}-\d{2}-\d{2}$/.test(date);
+}
 
 function importCSV(csvText) {
   const rows = parseCSV(csvText);
@@ -588,33 +595,60 @@ function importCSV(csvText) {
   let addedCount = 0;
   let updatedCount = 0;
 
-  rows.forEach((row) => {
+  for (const row of rows) {
+    if (!isValidDate(row.dueDate)) {
+      exportErrorMessage.style.color = "#ff8080";
+      exportErrorMessage.textContent = `Invalid due date: ${row.dueDate}`;
+      return;
+    }
+
+    if (!allowedPriorities.includes(row.priority)) {
+      exportErrorMessage.style.color = "#ff8080";
+      exportErrorMessage.textContent = `Invalid priority: ${row.priority}`;
+      return;
+    }
+
+    if (!allowedCategories.includes(row.category)) {
+      exportErrorMessage.style.color = "#ff8080";
+      exportErrorMessage.textContent = `Invalid category: ${row.category}`;
+      return;
+    }
+
+    if (row.completed !== "true" && row.completed !== "false") {
+      exportErrorMessage.style.color = "#ff8080";
+      exportErrorMessage.textContent = `Invalid status: ${row.completed}`;
+      return;
+    }
+  }
+
+  for (const row of rows) {
     const existingTask = tasks.find((task) => task.id === row.id);
 
     if (existingTask) {
-      // Existing task update karo
       existingTask.text = row.text;
       existingTask.dueDate = row.dueDate;
       existingTask.priority = row.priority;
       existingTask.category = row.category;
       existingTask.completed = row.completed === "true";
+
       updatedCount++;
     } else {
-      // Naya task add karo
       tasks.push({
         id:
           row.id && row.id.trim() !== ""
             ? row.id
             : String(Date.now() + Math.random()),
+
         text: row.text,
         dueDate: row.dueDate,
         priority: row.priority,
         category: row.category,
         completed: row.completed === "true",
       });
+
       addedCount++;
     }
-  });
+  }
 
   saveTasks();
   calculateStatistics();
