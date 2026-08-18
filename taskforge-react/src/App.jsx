@@ -1,19 +1,18 @@
-function Hello(props){
-return(
-
-<h1>Hello...kesy ho,{props.name}</h1>
-
-);
+function Greeting({ name, age }) {
+  return (
+    <div>
+      <h2>Hi, {name}!</h2>
+      <p>You are {age} years old.</p>
+    </div>
+  );
 }
 
 function App() {
-
-
   return (
     <div>
-     <Hello name="asad"/>
-     <Hello name="ali"/>
-     <Hello name="zain"/>
+      <Greeting name="Ali" age={25} />
+      <Greeting name="Sara" age={30} />
+      <Greeting name="Ahmed" age={22} />
     </div>
   );
 }
