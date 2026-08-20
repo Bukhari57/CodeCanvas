@@ -22,10 +22,10 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-slate-950 px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-slate-900 border border-slate-800 rounded-xl shadow-xl shadow-black/40 p-8"
+        className="w-full max-w-xl   bg-slate-900 border border-slate-800 rounded-xl shadow-xl shadow-black/40 p-8"
       >
         {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
@@ -40,7 +40,7 @@ export default function Login() {
           Enter your details to access your workspace.
         </p>
         {/* Email field */}
-        <div className="mb-4">
+        <div className="mb-5">
           <label className="block text-sm font-medium text-slate-300 mb-1">
             Email
           </label>
