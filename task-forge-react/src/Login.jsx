@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// Hardcoded credentials — replace with real API call later
 const EMAIL = "admin@taskforge.com";
 const PASSWORD = "forge123";
 
@@ -16,7 +15,6 @@ export default function Login() {
       setError("");
       alert(`Welcome back, ${email}!`);
     } else {
-      setError("Invalid email or password.");
       alert("Login failed: invalid email or password.");
     }
   };
