@@ -3,19 +3,18 @@ import { useState } from "react";
 const EMAIL = "admin@taskforge.com";
 const PASSWORD = "forge123";
 
-export default function Login() {
+export default function Login({ onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (email === EMAIL && password === PASSWORD) {
       setError("");
-      alert(`Welcome back, ${email}!`);
+      onLoginSuccess(email); // isLoggedIn true hote hi App.jsx khud /tasks pe bhej dega
     } else {
-      alert("Login failed: invalid email or password.");
+      setError("Invalid email or password.");
     }
   };
 
@@ -23,9 +22,8 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-slate-950 px-6">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-xl   bg-slate-900 border border-slate-800 rounded-xl shadow-xl shadow-black/40 p-8"
+        className="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-xl shadow-xl shadow-black/40 p-8"
       >
-        {/* Logo */}
         <div className="flex items-center gap-2 mb-6">
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
             <span className="text-white font-bold text-sm">T</span>
@@ -37,7 +35,7 @@ export default function Login() {
         <p className="text-sm text-slate-400 mb-6">
           Enter your details to access your workspace.
         </p>
-        {/* Email field */}
+
         <div className="mb-5">
           <label className="block text-sm font-medium text-slate-300 mb-1">
             Email
@@ -52,7 +50,6 @@ export default function Login() {
           />
         </div>
 
-        {/* Password field */}
         <div className="mb-6">
           <label className="block text-sm font-medium text-slate-300 mb-1">
             Password
@@ -67,7 +64,8 @@ export default function Login() {
           />
         </div>
 
-        {/* Submit button */}
+        {error && <p className="text-sm text-red-400 mb-4 -mt-3">{error}</p>}
+
         <button
           type="submit"
           className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium text-sm py-2 rounded-md transition"
@@ -75,7 +73,6 @@ export default function Login() {
           Sign in
         </button>
 
-        {/* Demo hint */}
         <p className="text-xs text-slate-500 text-center mt-4">
           Demo login: {EMAIL} / {PASSWORD}
         </p>
